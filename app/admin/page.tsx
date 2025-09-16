@@ -15,7 +15,7 @@ export default function AdminPage() {
       try {
         const result = await getAllGuests()
         if (result.success) {
-          setGuests(result.guests)
+          setGuests(result.guests || [])
         } else {
           setError(result.error || 'Failed to fetch guests')
         }
