@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 40 Unlocked - Birthday Celebration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            50: '#fefce8',
+                            100: '#fef9c3',
+                            200: '#fef08a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f',
+                        },
+                        cream: {
+                            50: '#fefdf8',
+                            100: '#fdf9e7',
+                            200: '#fcf5d6',
+                            300: '#faedc5',
+                            400: '#f8e5b4',
+                            500: '#f6dd9e',
+                        },
+                    },
+                    fontFamily: {
+                        elegant: ['Playfair Display', 'serif'],
+                        dancing: ['Dancing Script', 'cursive'],
+                    },
+                    keyframes: {
+                        'fade-in': {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        'slide-up': {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        'confetti-fall': {
+                            '0%': { transform: 'translateY(-100vh) rotate(0deg)', opacity: '1' },
+                            '100%': { transform: 'translateY(100vh) rotate(360deg)', opacity: '0' }
+                        },
+                        'streamer-flow': {
+                            '0%': { transform: 'translateY(-100vh) rotate(0deg)', opacity: '1' },
+                            '100%': { transform: 'translateY(100vh) rotate(5deg)', opacity: '0' }
+                        },
+                        'balloon-float': {
+                            '0%': { transform: 'translateY(-100vh) translateX(0px)', opacity: '1' },
+                            '50%': { transform: 'translateY(50vh) translateX(20px)', opacity: '0.8' },
+                            '100%': { transform: 'translateY(100vh) translateX(-20px)', opacity: '0' }
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fade-in 0.8s ease-out',
+                        'slide-up': 'slide-up 1s ease-out',
+                        'confetti-fall': 'confetti-fall 3s linear infinite',
+                        'streamer-flow': 'streamer-flow 3.5s linear infinite',
+                        'balloon-float': 'balloon-float 5s ease-in-out infinite'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .btn-primary {
+            @apply bg-gradient-to-r from-gold-500 to-gold-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:from-gold-600 hover:to-gold-700 transform hover:scale-105 transition-all duration-300;
+        }
+        .card {
+            @apply bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-8 border border-white/30;
+        }
+        .input-field {
+            @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-transparent transition-all duration-200;
+        }
+    </style>
+</head>
+<body class="min-h-screen relative overflow-hidden bg-gradient-to-b from-cream-50 to-cream-100">
+    <!-- Celebration Effects Background -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <!-- Gold Glitter Background -->
+        <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-gold-200/30 to-transparent"></div>
+        <div class="absolute bottom-0 right-0 w-64 h-32 bg-gradient-to-t from-gold-200/30 to-transparent"></div>
+        
+        <!-- Glitter particles -->
+        <div class="absolute top-4 left-1/4 w-1 h-1 bg-gold-400 rounded-full animate-pulse"></div>
+        <div class="absolute top-8 left-1/3 w-1 h-1 bg-gold-500 rounded-full animate-pulse" style="animation-delay: 0.5s;"></div>
+        <div class="absolute top-12 left-1/2 w-1 h-1 bg-gold-400 rounded-full animate-pulse" style="animation-delay: 1s;"></div>
+        <div class="absolute top-6 right-1/4 w-1 h-1 bg-gold-500 rounded-full animate-pulse" style="animation-delay: 1.5s;"></div>
+        <div class="absolute top-10 right-1/3 w-1 h-1 bg-gold-400 rounded-full animate-pulse" style="animation-delay: 2s;"></div>
+        <div class="absolute bottom-20 left-1/5 w-1 h-1 bg-gold-500 rounded-full animate-pulse" style="animation-delay: 0.3s;"></div>
+        <div class="absolute bottom-16 right-1/5 w-1 h-1 bg-gold-400 rounded-full animate-pulse" style="animation-delay: 0.8s;"></div>
+
+        <!-- Confetti - Full Width Coverage -->
+        <div id="confetti-container"></div>
+        <div id="streamers-container"></div>
+        <div id="balloons-container"></div>
+    </div>
+    
+    <!-- Main Invitation -->
+    <section class="py-12 px-4 relative z-10">
+        <div class="container mx-auto max-w-4xl">
+            <div class="bg-white/30 backdrop-blur-lg rounded-3xl shadow-2xl p-8 md:p-12 relative overflow-hidden border border-white/30">
+                <!-- Top Glitter Effect -->
+                <div class="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-gold-200/40 to-transparent"></div>
+                
+                <div class="text-center relative z-10">
+                    <!-- Level 40 Unlocked -->
+                    <div class="mb-6">
+                        <h1 class="text-3xl md:text-4xl font-elegant text-gold-800 mb-2 fade-in" style="font-family: 'Dancing Script', cursive;">
+                            Level 40 Unlocked
+                        </h1>
+                        <div class="w-24 h-0.5 bg-gold-600 mx-auto"></div>
+                    </div>
+
+                    <!-- Let's Party -->
+                    <div class="mb-12">
+                        <h2 class="text-6xl md:text-8xl font-elegant text-gold-700 mb-4 slide-up" style="font-family: 'Dancing Script', cursive;">
+                            Let's Party
+                        </h2>
+                    </div>
+
+                    <!-- Event Details -->
+                    <div class="space-y-6 mb-12 text-left max-w-md mx-auto">
+                        <!-- Date -->
+                        <div class="flex items-center space-x-4 fade-in">
+                            <div class="w-8 h-8 bg-gold-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <svg class="w-4 h-4 text-gold-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <span class="text-lg text-gray-700 font-medium">Friday 3rd October, 2025</span>
+                        </div>
+
+                        <!-- Times -->
+                        <div class="flex items-start space-x-4 fade-in" style="animation-delay: 0.1s;">
+                            <div class="w-8 h-8 bg-gold-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                <svg class="w-4 h-4 text-gold-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="text-lg text-gray-700 font-medium">2:00pm - Party Time</div>
+                                <div class="text-lg text-gray-700 font-medium">7:30pm - Praise Night</div>
+                            </div>
+                        </div>
+
+                        <!-- Location -->
+                        <div class="flex items-start space-x-4 fade-in" style="animation-delay: 0.2s;">
+                            <div class="w-8 h-8 bg-gold-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                <svg class="w-4 h-4 text-gold-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                            </div>
+                            <div class="text-lg text-gray-700 font-medium">
+                                The Stable, Bode Thomas Road, Surulere, Lagos.<br>
+                                <span class="text-sm text-gray-600">(by The Traffic Light Leading To Eric Moore Road)</span>
+                            </div>
+                        </div>
+
+                        <!-- Dress Code -->
+                        <div class="pt-4 border-t border-gold-200 fade-in" style="animation-delay: 0.3s;">
+                            <div class="text-center">
+                                <span class="text-lg font-semibold text-gold-800">DRESS CODE: Glam Up</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col sm:flex-row justify-center gap-4 mb-12">
+                        <button onclick="showRegistrationForm()" class="btn-primary text-lg py-4 px-12 rounded-full transform hover:scale-105 transition-all duration-300">
+                            Register Now
+                        </button>
+                        <button onclick="showCheckInForm()" class="bg-white text-gold-600 border-2 border-gold-600 font-semibold py-4 px-12 rounded-full shadow-lg hover:bg-gold-50 transform hover:scale-105 transition-all duration-300">
+                            Check In
+                        </button>
+                    </div>
+
+                    <!-- Special Invitation Banner -->
+                    <div class="relative">
+                        <div class="bg-gradient-to-r from-gold-200 to-gold-300 rounded-lg p-4 relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-32 h-full bg-gradient-to-l from-gold-400/30 to-transparent"></div>
+                            <div class="relative z-10">
+                                <div class="text-sm text-gold-600 font-medium mb-1">four decades of</div>
+                                <div class="text-xl font-bold text-gold-800">SPECIAL INVITATION</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Link -->
+            <div class="mt-8 text-center">
+                <button onclick="showAdminPanel()" class="text-gold-600 hover:text-gold-700 font-medium transition-colors duration-200">
+                    Admin Dashboard →
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Modal -->
+    <div id="registrationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gold-700">Guest Registration</h3>
+                <button onclick="hideRegistrationForm()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+            
+            <form id="registrationForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                    <input type="text" id="firstName" class="input-field" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                    <input type="text" id="lastName" class="input-field" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <input type="email" id="email" class="input-field" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                    <input type="tel" id="phone" class="input-field" required>
+                </div>
+                <button type="submit" class="w-full btn-primary">
+                    Register
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Check-in Modal -->
+    <div id="checkInModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gold-700">Guest Check-In</h3>
+                <button onclick="hideCheckInForm()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+            
+            <form id="checkInForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Check-in Code</label>
+                    <input type="text" id="checkInCode" class="input-field" placeholder="Enter your unique code" required>
+                </div>
+                <button type="submit" class="w-full btn-primary">
+                    Check In
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div id="adminModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gold-700">Admin Dashboard</h3>
+                <button onclick="hideAdminPanel()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+            
+            <div id="adminContent">
+                <div class="text-center">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-gold-600 mx-auto"></div>
+                    <p class="mt-4 text-gray-600">Loading guests...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+    <script>
+        // Appwrite configuration
+        const APPWRITE_ENDPOINT = 'https://cloud.appwrite.io/v1';
+        const APPWRITE_PROJECT_ID = 'your_project_id'; // Replace with your actual project ID
+        const DATABASE_ID = 'birthday-invite';
+        const GUESTS_COLLECTION_ID = 'guests';
+
+        // Initialize Appwrite
+        let appwriteClient;
+        let databases;
+
+        async function initAppwrite() {
+            try {
+                const { Client, Databases, ID } = await import('https://cdn.skypack.dev/appwrite@13.0.0');
+                
+                appwriteClient = new Client()
+                    .setEndpoint(APPWRITE_ENDPOINT)
+                    .setProject(APPWRITE_PROJECT_ID);
+                
+                databases = new Databases(appwriteClient);
+            } catch (error) {
+                console.error('Failed to initialize Appwrite:', error);
+                showToast('Failed to initialize database connection', 'error');
+            }
+        }
+
+        // Initialize on page load
+        initAppwrite();
+
+        // Celebration effects
+        function createCelebrationEffects() {
+            const confettiContainer = document.getElementById('confetti-container');
+            const streamersContainer = document.getElementById('streamers-container');
+            const balloonsContainer = document.getElementById('balloons-container');
+
+            // Create confetti
+            for (let i = 0; i < 30; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'absolute top-0 w-2 h-2 bg-gold-400 rounded-full animate-confetti-fall';
+                confetti.style.left = `${(i / 29) * 100}%`;
+                confetti.style.animationDuration = `${3 + Math.random() * 2}s`;
+                confetti.style.animationDelay = `${Math.random() * 3}s`;
+                confetti.style.backgroundColor = i % 4 === 0 ? '#f59e0b' : i % 4 === 1 ? '#fbbf24' : i % 4 === 2 ? '#fcd34d' : '#fde68a';
+                confettiContainer.appendChild(confetti);
+            }
+
+            // Create streamers
+            for (let i = 0; i < 20; i++) {
+                const streamer = document.createElement('div');
+                streamer.className = 'absolute top-0 w-1 bg-gradient-to-b from-gold-400 to-gold-600 animate-streamer-flow';
+                streamer.style.left = `${(i / 19) * 100}%`;
+                streamer.style.height = `${14 + Math.random() * 12}px`;
+                streamer.style.animationDuration = `${3.5 + Math.random() * 2}s`;
+                streamer.style.animationDelay = `${Math.random() * 3}s`;
+                streamersContainer.appendChild(streamer);
+            }
+
+            // Create balloons
+            for (let i = 0; i < 12; i++) {
+                const balloon = document.createElement('div');
+                balloon.className = 'absolute top-0 w-4 h-6 rounded-full animate-balloon-float';
+                balloon.style.left = `${(i / 11) * 100}%`;
+                balloon.style.animationDuration = `${5 + Math.random() * 3}s`;
+                balloon.style.animationDelay = `${Math.random() * 4}s`;
+                const colors = ['#ec4899', '#3b82f6', '#10b981', '#8b5cf6', '#f59e0b', '#ef4444'];
+                const darkColors = ['#be185d', '#1d4ed8', '#047857', '#7c3aed', '#d97706', '#dc2626'];
+                balloon.style.background = `linear-gradient(to bottom, ${colors[i % 6]}, ${darkColors[i % 6]})`;
+                balloonsContainer.appendChild(balloon);
+            }
+        }
+
+        // Modal functions
+        function showRegistrationForm() {
+            document.getElementById('registrationModal').classList.remove('hidden');
+            document.getElementById('registrationModal').classList.add('flex');
+        }
+
+        function hideRegistrationForm() {
+            document.getElementById('registrationModal').classList.add('hidden');
+            document.getElementById('registrationModal').classList.remove('flex');
+        }
+
+        function showCheckInForm() {
+            document.getElementById('checkInModal').classList.remove('hidden');
+            document.getElementById('checkInModal').classList.add('flex');
+        }
+
+        function hideCheckInForm() {
+            document.getElementById('checkInModal').classList.add('hidden');
+            document.getElementById('checkInModal').classList.remove('flex');
+        }
+
+        function showAdminPanel() {
+            document.getElementById('adminModal').classList.remove('hidden');
+            document.getElementById('adminModal').classList.add('flex');
+            loadGuests();
+        }
+
+        function hideAdminPanel() {
+            document.getElementById('adminModal').classList.add('hidden');
+            document.getElementById('adminModal').classList.remove('flex');
+        }
+
+        // Toast notification
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
+            toast.className = `${bgColor} text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full`;
+            toast.textContent = message;
+            
+            document.getElementById('toastContainer').appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+            }, 100);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Generate unique code
+        function generateUniqueCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let result = '';
+            for (let i = 0; i < 8; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        // Registration form handler
+        document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value
+            };
+
+            try {
+                // Generate unique code
+                const uniqueCode = generateUniqueCode();
+                
+                // Create guest document
+                const guestData = {
+                    email: formData.email.toLowerCase(),
+                    firstName: formData.firstName,
+                    lastName: formData.lastName,
+                    phone: formData.phone,
+                    uniqueCode: uniqueCode,
+                    isCheckedIn: false,
+                    registeredAt: new Date().toISOString()
+                };
+
+                if (databases) {
+                    const { ID } = await import('https://cdn.skypack.dev/appwrite@13.0.0');
+                    const document = await databases.createDocument(
+                        DATABASE_ID,
+                        GUESTS_COLLECTION_ID,
+                        ID.unique(),
+                        guestData
+                    );
+
+                    showToast(`Registration successful! Your check-in code is: ${uniqueCode}`, 'success');
+                    hideRegistrationForm();
+                    document.getElementById('registrationForm').reset();
+                } else {
+                    showToast('Database not initialized. Please check your Appwrite configuration.', 'error');
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                showToast('Registration failed. Please try again.', 'error');
+            }
+        });
+
+        // Check-in form handler
+        document.getElementById('checkInForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const checkInCode = document.getElementById('checkInCode').value.toUpperCase();
+
+            try {
+                if (databases) {
+                    // Find guest by unique code
+                    const guestQuery = await databases.listDocuments(
+                        DATABASE_ID,
+                        GUESTS_COLLECTION_ID,
+                        [['uniqueCode', '=', checkInCode]]
+                    );
+
+                    if (guestQuery.documents.length === 0) {
+                        showToast('Invalid check-in code. Please verify your code and try again.', 'error');
+                        return;
+                    }
+
+                    const guestDoc = guestQuery.documents[0];
+                    const guestData = guestDoc;
+
+                    // Check if already checked in
+                    if (guestData.isCheckedIn) {
+                        showToast(`Welcome back, ${guestData.firstName} ${guestData.lastName}! You're already checked in.`, 'success');
+                        return;
+                    }
+
+                    // Update check-in status
+                    await databases.updateDocument(
+                        DATABASE_ID,
+                        GUESTS_COLLECTION_ID,
+                        guestDoc.$id,
+                        {
+                            isCheckedIn: true,
+                            checkedInAt: new Date().toISOString()
+                        }
+                    );
+
+                    showToast(`Welcome, ${guestData.firstName} ${guestData.lastName}! Check-in successful.`, 'success');
+                    hideCheckInForm();
+                    document.getElementById('checkInForm').reset();
+                } else {
+                    showToast('Database not initialized. Please check your Appwrite configuration.', 'error');
+                }
+            } catch (error) {
+                console.error('Check-in error:', error);
+                showToast('Check-in failed. Please try again.', 'error');
+            }
+        });
+
+        // Load guests for admin panel
+        async function loadGuests() {
+            try {
+                if (databases) {
+                    const guestsQuery = await databases.listDocuments(
+                        DATABASE_ID,
+                        GUESTS_COLLECTION_ID
+                    );
+                    
+                    const guests = guestsQuery.documents.map((doc) => ({
+                        id: doc.$id,
+                        email: doc.email,
+                        firstName: doc.firstName,
+                        lastName: doc.lastName,
+                        phone: doc.phone,
+                        uniqueCode: doc.uniqueCode,
+                        isCheckedIn: doc.isCheckedIn,
+                        registeredAt: new Date(doc.registeredAt),
+                        checkedInAt: doc.checkedInAt ? new Date(doc.checkedInAt) : null
+                    }));
+
+                    const checkedInCount = guests.filter(guest => guest.isCheckedIn).length;
+                    const totalCount = guests.length;
+
+                    const adminContent = document.getElementById('adminContent');
+                    adminContent.innerHTML = `
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                            <div class="bg-gradient-to-r from-gold-100 to-gold-200 p-6 rounded-lg text-center">
+                                <div class="text-3xl font-bold text-gold-600 mb-2">${totalCount}</div>
+                                <div class="text-gray-600">Total Guests</div>
+                            </div>
+                            <div class="bg-gradient-to-r from-green-100 to-green-200 p-6 rounded-lg text-center">
+                                <div class="text-3xl font-bold text-green-600 mb-2">${checkedInCount}</div>
+                                <div class="text-gray-600">Checked In</div>
+                            </div>
+                            <div class="bg-gradient-to-r from-blue-100 to-blue-200 p-6 rounded-lg text-center">
+                                <div class="text-3xl font-bold text-blue-600 mb-2">${totalCount - checkedInCount}</div>
+                                <div class="text-gray-600">Pending</div>
+                            </div>
+                        </div>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="border-b border-gray-200">
+                                        <th class="text-left py-3 px-4 font-semibold text-gray-700">Name</th>
+                                        <th class="text-left py-3 px-4 font-semibold text-gray-700">Email</th>
+                                        <th class="text-left py-3 px-4 font-semibold text-gray-700">Phone</th>
+                                        <th class="text-left py-3 px-4 font-semibold text-gray-700">Code</th>
+                                        <th class="text-left py-3 px-4 font-semibold text-gray-700">Status</th>
+                                        <th class="text-left py-3 px-4 font-semibold text-gray-700">Registered</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${guests.map(guest => `
+                                        <tr class="border-b border-gray-100 hover:bg-gray-50">
+                                            <td class="py-3 px-4">
+                                                <div class="font-medium text-gray-900">
+                                                    ${guest.firstName} ${guest.lastName}
+                                                </div>
+                                            </td>
+                                            <td class="py-3 px-4 text-gray-600">${guest.email}</td>
+                                            <td class="py-3 px-4 text-gray-600">${guest.phone}</td>
+                                            <td class="py-3 px-4">
+                                                <code class="bg-gray-100 px-2 py-1 rounded text-sm font-mono">
+                                                    ${guest.uniqueCode}
+                                                </code>
+                                            </td>
+                                            <td class="py-3 px-4">
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                                    guest.isCheckedIn 
+                                                        ? 'bg-green-100 text-green-800' 
+                                                        : 'bg-yellow-100 text-yellow-800'
+                                                }">
+                                                    ${guest.isCheckedIn ? 'Checked In' : 'Pending'}
+                                                </span>
+                                            </td>
+                                            <td class="py-3 px-4 text-gray-600">
+                                                ${guest.registeredAt.toLocaleDateString()}
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('adminContent').innerHTML = `
+                        <div class="text-center text-red-600">
+                            <p>Database not initialized. Please check your Appwrite configuration.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading guests:', error);
+                document.getElementById('adminContent').innerHTML = `
+                    <div class="text-center text-red-600">
+                        <p>Failed to load guests. Please try again.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize celebration effects on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            createCelebrationEffects();
+        });
+    </script>
+</body>
+</html>
