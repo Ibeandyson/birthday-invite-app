@@ -15,7 +15,7 @@ A beautiful Next.js application for birthday party invitations with guest regist
 
 - **Frontend**: Next.js 13, React, TypeScript, Tailwind CSS
 - **Backend**: Appwrite (Node.js SDK)
-- **Email**: Nodemailer
+- **Email**: SendGrid
 - **Styling**: Custom gold and cream color palette
 
 ## Setup Instructions
@@ -43,9 +43,9 @@ NEXT_PUBLIC_APPWRITE_DATABASE_ID=birthday-invite
 NEXT_PUBLIC_APPWRITE_GUESTS_COLLECTION_ID=guests
 APPWRITE_API_KEY=your_api_key
 
-# Email Configuration
-EMAIL_USER=your_email@gmail.com
-EMAIL_PASS=your_app_password
+# SendGrid Configuration
+SENDGRID_API_KEY=your_sendgrid_api_key
+SENDGRID_FROM_EMAIL=your_verified_email@domain.com
 ```
 
 ### 3. Database Setup
@@ -73,12 +73,22 @@ EMAIL_PASS=your_app_password
    - Update: `any`
    - Delete: `any`
 
-### 4. Email Configuration
+### 4. SendGrid Setup
 
-For email functionality, you'll need to set up email credentials in `.env.local`:
+1. **Create a SendGrid Account**:
+   - Go to [SendGrid](https://sendgrid.com/) and create a free account
+   - Verify your email address
 
-- For Gmail: Use an App Password (not your regular password)
-- Enable 2-factor authentication and generate an App Password
+2. **Create an API Key**:
+   - Go to Settings → API Keys
+   - Click "Create API Key"
+   - Choose "Restricted Access" and give it "Mail Send" permissions
+   - Copy the generated API key
+
+3. **Verify Your Sender Email**:
+   - Go to Settings → Sender Authentication
+   - Verify a Single Sender (or use Domain Authentication for production)
+   - Use this verified email as your `SENDGRID_FROM_EMAIL`
 
 ### 5. Run the Development Server
 
@@ -152,8 +162,8 @@ The app can be deployed to any platform that supports Next.js applications.
 | `NEXT_PUBLIC_APPWRITE_DATABASE_ID` | Database ID (default: birthday-invite) |
 | `NEXT_PUBLIC_APPWRITE_GUESTS_COLLECTION_ID` | Collection ID (default: guests) |
 | `APPWRITE_API_KEY` | Your Appwrite API key for server-side operations |
-| `EMAIL_USER` | Email address for sending emails |
-| `EMAIL_PASS` | Email password or app password |
+| `SENDGRID_API_KEY` | Your SendGrid API key |
+| `SENDGRID_FROM_EMAIL` | Verified sender email address |
 
 ## License
 

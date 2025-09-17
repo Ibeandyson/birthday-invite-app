@@ -12,11 +12,29 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-gradient-to-r from-gold-500 to-gold-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:from-gold-600 hover:to-gold-700 transform hover:scale-105 transition-all duration-300;
+    @apply text-white font-semibold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300;
+    background: linear-gradient(to right, #d4af37, #b8860b);
+  }
+  
+  .btn-primary:hover {
+    background: linear-gradient(to right, #b8860b, #9a6b0a);
+  }
+
+  .btn-secondary {
+    @apply font-semibold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300;
+    background: linear-gradient(to right, #f4e4bc, #d4af37);
+    color: #1a1a1a;
+  }
+  
+  .btn-secondary:hover {
+    background: linear-gradient(to right, #d4af37, #b8860b);
+    color: #ffffff;
   }
 
   .card {
-    @apply bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-8 border border-white/30;
+    @apply backdrop-blur-lg rounded-2xl shadow-xl p-8 border;
+    background: rgba(255, 255, 255, 0.05);
+    border-color: #d4af37;
   }
 
   .fade-in {
@@ -32,7 +50,6 @@
   }
 
   /* Form Input Styling */
-  .input-field,
   input[type="text"],
   input[type="email"],
   input[type="tel"],
@@ -42,7 +59,6 @@
     @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-gold-500 transition-colors duration-200 bg-white/90 backdrop-blur-sm;
   }
 
-  .input-field:focus,
   input[type="text"]:focus,
   input[type="email"]:focus,
   input[type="tel"]:focus,
@@ -62,24 +78,6 @@
 
   .error-message {
     @apply text-red-600 text-sm mt-1;
-  }
-
-  .btn-secondary {
-    @apply bg-gray-100 text-gray-700 font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-gray-200 transform hover:scale-105 transition-all duration-300;
-  }
-
-  .bounce-in {
-    animation: bounceIn 0.6s ease-out;
-  }
-
-  .pulse-glow {
-    animation: pulseGlow 2s ease-in-out infinite;
-  }
-
-  .shimmer {
-    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.5) 50%, transparent 70%);
-    background-size: 200% 100%;
-    animation: shimmer 2s infinite;
   }
 }
 
@@ -198,40 +196,4 @@
 
 .animate-balloon-float {
   animation: balloon-float linear infinite;
-}
-
-@keyframes bounceIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.3);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.05);
-  }
-  70% {
-    transform: scale(0.9);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes pulseGlow {
-  0%, 100% {
-    box-shadow: 0 0 5px rgba(245, 158, 11, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(245, 158, 11, 0.6);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
 }

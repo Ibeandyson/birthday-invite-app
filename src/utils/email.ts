@@ -1,17 +1,12 @@
-import nodemailer from 'nodemailer';
+import sgMail from '@sendgrid/mail';
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+// Initialize SendGrid
+sgMail.setApiKey(process.env.SENDGRID_API_KEY || '');
 
 export const sendVerificationEmail = async (email: string, uniqueCode: string, guestName: string) => {
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
+  const msg = {
     to: email,
+    from: process.env.SENDGRID_FROM_EMAIL || 'noreply@birthday-invite.com',
     subject: 'Birthday Party Invitation - Your Unique Check-in Code',
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, #fefdf8 0%, #fdf9e7 100%); padding: 40px; border-radius: 10px;">
@@ -40,9 +35,9 @@ export const sendVerificationEmail = async (email: string, uniqueCode: string, g
           <div style="background: #f0d96b; padding: 15px; border-radius: 6px; margin: 20px 0;">
             <p style="color: #78350f; margin: 0; font-weight: 500;">
               📅 <strong>Event Details:</strong><br>
-              Date: [Event Date]<br>
-              Time: [Event Time]<br>
-              Location: [Event Location]
+              Date: Friday 3rd October, 2025<br>
+              Time: 2:00pm - Party Time | 7:30pm - Praise Night<br>
+              Location: The Stable, Bode Thomas Road, Surulere, Lagos
             </p>
           </div>
           
@@ -59,7 +54,7 @@ export const sendVerificationEmail = async (email: string, uniqueCode: string, g
   };
 
   try {
-    await transporter.sendMail(mailOptions);
+    await sgMail.send(msg);
     return { success: true };
   } catch (error) {
     console.error('Error sending email:', error);

@@ -11,16 +11,16 @@ module.exports = {
     extend: {
       colors: {
         gold: {
-          50: '#fffbeb',
-          100: '#fef3c7',
-          200: '#fde68a',
-          300: '#fcd34d',
-          400: '#fbbf24',
-          500: '#f59e0b',
-          600: '#d97706',
-          700: '#b45309',
-          800: '#92400e',
-          900: '#78350f',
+          50: '#fffdf7',
+          100: '#fef9e7',
+          200: '#fdf2d1',
+          300: '#fce7a8',
+          400: '#f9d571',
+          500: '#f5c23a',
+          600: '#d4a017',
+          700: '#b8860b',
+          800: '#9a6b0a',
+          900: '#7c5508',
         },
         cream: {
           50: '#fefdf8',
@@ -33,6 +33,14 @@ module.exports = {
           700: '#b08c2f',
           800: '#8c6f2a',
           900: '#725a25',
+        },
+        elegant: {
+          black: '#1a1a1a',
+          gold: '#d4af37',
+          goldLight: '#f4e4bc',
+          goldDark: '#b8860b',
+          cream: '#f5f5dc',
+          creamDark: '#f0e68c',
         }
       },
       fontFamily: {
