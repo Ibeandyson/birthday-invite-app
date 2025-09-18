@@ -31,6 +31,8 @@ export default function AdminPage() {
 
   const checkedInCount = guests.filter(guest => guest.isCheckedIn).length
   const totalCount = guests.length
+  const totalExtraGuests = guests.reduce((sum, guest) => sum + (guest.extraGuests || 0), 0)
+  const totalAttendees =  Number(totalCount) + Number(totalExtraGuests)
 
   if (loading) {
     return (
@@ -98,18 +100,22 @@ export default function AdminPage() {
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
             <div className="card text-center fade-in">
               <div className="text-3xl font-bold mb-2" style={{ color: '#d4af37' }}>{totalCount}</div>
-              <div className="text-gray-600">Total Guests</div>
+              <div className="text-gray-600">Registered Guests</div>
             </div>
             <div className="card text-center fade-in" style={{ animationDelay: '0.1s' }}>
-              <div className="text-3xl font-bold text-green-600 mb-2">{checkedInCount}</div>
-              <div className="text-gray-600">Checked In</div>
+              <div className="text-3xl font-bold text-blue-600 mb-2">{totalExtraGuests}</div>
+              <div className="text-gray-600">Extra Guests</div>
             </div>
             <div className="card text-center fade-in" style={{ animationDelay: '0.2s' }}>
-              <div className="text-3xl font-bold text-blue-600 mb-2">{totalCount - checkedInCount}</div>
-              <div className="text-gray-600">Pending</div>
+              <div className="text-3xl font-bold text-purple-600 mb-2">{totalAttendees}</div>
+              <div className="text-gray-600">Total Attendees</div>
+            </div>
+            <div className="card text-center fade-in" style={{ animationDelay: '0.3s' }}>
+              <div className="text-3xl font-bold text-green-600 mb-2">{checkedInCount}</div>
+              <div className="text-gray-600">Checked In</div>
             </div>
           </div>
 
@@ -122,7 +128,7 @@ export default function AdminPage() {
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Name</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Email</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Phone</th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Code</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Extra Guests</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Status</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Registered</th>
                   </tr>
@@ -137,10 +143,14 @@ export default function AdminPage() {
                       </td>
                       <td className="py-3 px-4 text-gray-600">{guest.email}</td>
                       <td className="py-3 px-4 text-gray-600">{guest.phone}</td>
-                      <td className="py-3 px-4">
-                        <code className="bg-gray-100 px-2 py-1 rounded text-sm font-mono">
-                          {guest.uniqueCode}
-                        </code>
+                      <td className="py-3 px-4 text-gray-600">
+                        {guest.extraGuests > 0 ? (
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            +{guest.extraGuests}
+                          </span>
+                        ) : (
+                          <span className="text-gray-400">-</span>
+                        )}
                       </td>
                       <td className="py-3 px-4">
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${

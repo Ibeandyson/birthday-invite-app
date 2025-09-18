@@ -9,7 +9,8 @@ import toast from 'react-hot-toast'
 export default function RegistrationForm() {
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
-  const [uniqueCode, setUniqueCode] = useState('')
+  const [hasExtraGuests, setHasExtraGuests] = useState(false)
+  const [registeredExtraGuests, setRegisteredExtraGuests] = useState(0)
 
   const {
     register,
@@ -21,12 +22,26 @@ export default function RegistrationForm() {
   const onSubmit = async (data: RegistrationFormData) => {
     setIsLoading(true)
     try {
-      const result = await registerGuest(data)
+      // Prepare form data - only include extraGuests if bringing guests
+      const formData: any = {
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        phone: data.phone
+      }
+      
+      // Only add extraGuests if user is bringing guests
+      if (hasExtraGuests && data.extraGuests) {
+        formData.extraGuests = data.extraGuests
+      }
+      
+      const result = await registerGuest(formData)
       if (result.success) {
-        setUniqueCode(result.uniqueCode!)
+        setRegisteredExtraGuests(data.extraGuests || 0)
         setIsSuccess(true)
         reset()
-        toast.success('Registration successful! Check your email for your unique code.')
+        setHasExtraGuests(false)
+        toast.success('Registration successful! Check your email for check-in instructions.')
       } else {
         toast.error(result.error || 'Registration failed. Please try again.')
       }
@@ -48,24 +63,31 @@ export default function RegistrationForm() {
           </div>
           <h2 className="text-3xl font-elegant text-gold-700 mb-4 slide-up">Registration Successful!</h2>
           <p className="text-lg text-gray-600 mb-6 fade-in">
-            Thank you for registering! We've sent your unique check-in code to your email.
+            Thank you for registering! We've sent check-in instructions to your email.
           </p>
+          {registeredExtraGuests > 0 && (
+            <div className="bg-gold-100 border-2 border-gold-300 rounded-lg p-4 mb-6 bounce-in">
+              <p className="text-lg text-gold-800 font-semibold text-center">
+                Extra Guests: {registeredExtraGuests}
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="bg-gold-50 border-2 border-gold-200 rounded-lg p-6 mb-6 bounce-in shimmer">
-          <h3 className="text-xl font-semibold text-gold-800 mb-2">Your Unique Code:</h3>
-          <div className="text-3xl font-mono font-bold text-gold-700 tracking-wider pulse-glow">
-            {uniqueCode}
-          </div>
+          <h3 className="text-xl font-semibold text-gold-800 mb-2">Check-in Instructions:</h3>
+          <p className="text-lg text-gold-700 mb-2">
+            Simply use your email address to check in at the event!
+          </p>
           <p className="text-sm text-gold-600 mt-2">
-            Please save this code for check-in at the event
+            No code needed - just provide your email address at the check-in desk
           </p>
         </div>
 
         <button
           onClick={() => {
             setIsSuccess(false)
-            setUniqueCode('')
+            setRegisteredExtraGuests(0)
           }}
           className="btn-secondary bounce-in"
         >
@@ -156,6 +178,69 @@ export default function RegistrationForm() {
           />
           {errors.phone && (
             <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+          )}
+        </div>
+
+        <div>
+          <label className="block text-sm font-semibold text-gold-800 mb-2">
+            Will you be bringing extra guests?
+          </label>
+          <div className="flex space-x-4 mb-4">
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="hasExtraGuests"
+                value="no"
+                checked={!hasExtraGuests}
+                onChange={() => setHasExtraGuests(false)}
+                className="mr-2"
+              />
+              <span className="text-gray-700">No, just me</span>
+            </label>
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="hasExtraGuests"
+                value="yes"
+                checked={hasExtraGuests}
+                onChange={() => setHasExtraGuests(true)}
+                className="mr-2"
+              />
+              <span className="text-gray-700">Yes, I'll bring guests</span>
+            </label>
+          </div>
+          
+          {hasExtraGuests && (
+            <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <label htmlFor="extraGuests" className="block text-sm font-semibold text-gold-800 mb-2">
+                Number of Extra Guests * (3 MAX)
+              </label>
+              <input
+                {...register('extraGuests', {
+                  required: hasExtraGuests ? 'Number of extra guests is required' : false,
+                  min: {
+                    value: 1,
+                    message: 'Must be at least 1 extra guest'
+                  },
+                  max: {
+                    value: 3,
+                    message: 'Maximum 3 extra guests allowed'
+                  }
+                })}
+                type="number"
+                id="extraGuests"
+                min="1"
+                max="3"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold-500 focus:border-gold-500 transition-colors duration-200 bg-white"
+                placeholder="Enter number of extra guests"
+              />
+              {errors.extraGuests && (
+                <p className="text-red-500 text-sm mt-1">{errors.extraGuests.message}</p>
+              )}
+              <p className="text-sm text-gray-500 mt-2">
+                How many extra guests will you be bringing? (1-3)
+              </p>
+            </div>
           )}
         </div>
 

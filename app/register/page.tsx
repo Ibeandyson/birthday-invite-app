@@ -1,3 +1,4 @@
+import React from 'react'
 import Link from 'next/link'
 import RegistrationForm from '../../src/components/RegistrationForm'
 
@@ -25,7 +26,7 @@ export default function RegisterPage() {
               Guest Registration
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto fade-in">
-              Join us for the birthday celebration! Fill out the form below to register and receive your unique check-in code.
+              Join us for the birthday celebration! Fill out the form below to register and use your email for check-in at the event.
             </p>
           </div>
 

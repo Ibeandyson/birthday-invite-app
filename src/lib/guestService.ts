@@ -1,6 +1,6 @@
 import { Guest, RegistrationFormData } from '@/types'
 
-export const registerGuest = async (formData: RegistrationFormData): Promise<{success: boolean; uniqueCode?: string; guestId?: string; error?: string}> => {
+export const registerGuest = async (formData: RegistrationFormData): Promise<{success: boolean; guestId?: string; error?: string}> => {
   try {
     const response = await fetch('/api/guests/register', {
       method: 'POST',
@@ -21,14 +21,14 @@ export const registerGuest = async (formData: RegistrationFormData): Promise<{su
   }
 }
 
-export const checkInGuest = async (uniqueCode: string): Promise<{success: boolean; guestName?: string; isAlreadyCheckedIn?: boolean; error?: string}> => {
+export const checkInGuest = async (email: string): Promise<{success: boolean; guestName?: string; extraGuests?: number; isAlreadyCheckedIn?: boolean; error?: string}> => {
   try {
     const response = await fetch('/api/guests/checkin', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ uniqueCode }),
+      body: JSON.stringify({ email }),
     })
 
     const result = await response.json()

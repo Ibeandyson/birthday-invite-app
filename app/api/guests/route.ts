@@ -15,7 +15,8 @@ export async function GET() {
       firstName: doc.firstName,
       lastName: doc.lastName,
       phone: doc.phone,
-      uniqueCode: doc.uniqueCode,
+      uniqueCode: (doc as any).uniqueCode || '',
+      extraGuests: (doc as any).extraGuests || 0,
       isCheckedIn: doc.isCheckedIn,
       registeredAt: doc.$createdAt ? new Date(doc.$createdAt) : new Date(),
       checkedInAt: doc.isCheckedIn ? doc.$updatedAt ? new Date(doc.$updatedAt) : new Date() : undefined

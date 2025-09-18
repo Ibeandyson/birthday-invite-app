@@ -1,44 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { databases, DATABASE_ID, GUESTS_COLLECTION_ID, Query } from '@/lib/appwrite'
 import { Guest } from '@/types'
+import { sendCheckInEmail } from '@/utils/email'
 
 export async function POST(request: NextRequest) {
   try {
-    const { uniqueCode } = await request.json()
+    const { email } = await request.json()
     
-    if (!uniqueCode) {
+    if (!email) {
       return NextResponse.json(
-        { success: false, error: 'Unique code is required' },
+        { success: false, error: 'Email address is required' },
         { status: 400 }
       )
     }
 
-    // Find guest by unique code
-    console.log('Searching for unique code:', uniqueCode)
-    console.log('Searching for unique code (uppercase):', uniqueCode.toUpperCase())
+    // Find guest by email
+    console.log('Searching for email:', email)
     
-    // Try both cases
-    let guestQuery = await databases.listDocuments(
+    const guestQuery = await databases.listDocuments(
       DATABASE_ID,
       GUESTS_COLLECTION_ID,
-      [Query.equal("uniqueCode", uniqueCode)]
+      [Query.equal("email", email.toLowerCase())]
     )
-    
-    // If not found, try uppercase
-    if (guestQuery.documents.length === 0) {
-      guestQuery = await databases.listDocuments(
-        DATABASE_ID,
-        GUESTS_COLLECTION_ID,
-        [Query.equal("uniqueCode", uniqueCode.toUpperCase())]
-      )
-    }
     
     console.log('Query result:', guestQuery.documents.length, 'documents found')
 
     if (guestQuery.documents.length === 0) {
       return NextResponse.json({
         success: false,
-        error: 'Invalid check-in code. Please verify your code and try again.'
+        error: 'No guest found with this email address. Please verify your email and try again.'
       })
     }
 
@@ -50,6 +40,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({
         success: true,
         guestName: `${guestData.firstName} ${guestData.lastName}`,
+        extraGuests: (guestData as any).extraGuests || 0,
         isAlreadyCheckedIn: true
       })
     }
@@ -64,9 +55,23 @@ export async function POST(request: NextRequest) {
       }
     )
 
+    // Send check-in confirmation email
+    try {
+      const emailInfo = sendCheckInEmail(
+        email, 
+        `${guestData.firstName} ${guestData.lastName}`, 
+        (guestData as any).extraGuests || 0
+      )
+      console.log('Check-in email sent response:', emailInfo)
+    } catch (emailError) {
+      console.error('Error sending check-in email:', emailError)
+      // Don't fail the check-in if email fails
+    }
+
     return NextResponse.json({
       success: true,
       guestName: `${guestData.firstName} ${guestData.lastName}`,
+      extraGuests: (guestData as any).extraGuests || 0,
       isAlreadyCheckedIn: false
     })
 

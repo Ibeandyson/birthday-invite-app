@@ -25,7 +25,7 @@ export default function CheckInPage() {
               Guest Check-In
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto fade-in">
-              Welcome to the birthday celebration! Enter your unique check-in code to mark your attendance.
+              Welcome to the birthday celebration! Enter your email address to check in.
             </p>
           </div>
 

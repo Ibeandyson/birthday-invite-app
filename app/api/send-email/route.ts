@@ -3,27 +3,49 @@ import nodemailer from 'nodemailer'
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, uniqueCode, guestName } = await request.json()
+    const { email, guestName } = await request.json()
 
-    if (!email || !uniqueCode || !guestName) {
+    if (!email || !guestName) {
       return NextResponse.json({
         success: false,
         error: 'Missing required fields'
       }, { status: 400 })
     }
 
+    // Check if SMTP environment variables are set
+    if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
+      console.error('Missing SMTP environment variables:', {
+        hasHost: !!process.env.SMTP_HOST,
+        hasUser: !!process.env.SMTP_USER,
+        hasPass: !!process.env.SMTP_PASS
+      })
+      return NextResponse.json({
+        success: false,
+        error: 'SMTP configuration missing'
+      }, { status: 500 })
+    }
+
+    console.log('Creating SMTP transporter with:', {
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT || '587',
+      secure: process.env.SMTP_SECURE === 'true',
+      user: process.env.SMTP_USER
+    })
+
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: process.env.SMTP_HOST,
+      port: parseInt(process.env.SMTP_PORT || '587'),
+      secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
       },
     })
 
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: process.env.SMTP_USER,
       to: email,
-      subject: 'Birthday Party Invitation - Your Unique Check-in Code',
+      subject: 'Welcome to the Birthday Celebration!',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, #fefdf8 0%, #fdf9e7 100%); padding: 40px; border-radius: 20px; position: relative; overflow: hidden;">
           <!-- Gold Glitter Background -->
@@ -39,7 +61,7 @@ export async function POST(request: NextRequest) {
             <h3 style="color: #78350f; font-size: 24px; margin-bottom: 20px; text-align: center;">Hello ${guestName}! 👋</h3>
             
             <p style="color: #374151; font-size: 16px; line-height: 1.6; margin-bottom: 20px; text-align: center;">
-              You're cordially invited to celebrate this special milestone! We're thrilled to have you join us for this wonderful occasion.
+              Welcome to the birthday celebration! Use your email address to check in at the event.
             </p>
             
             <!-- Event Details -->
@@ -59,19 +81,20 @@ export async function POST(request: NextRequest) {
               </div>
             </div>
             
-            <!-- Check-in Code -->
+            <!-- Check-in Instructions -->
             <div style="background: #f0d96b; padding: 20px; border-radius: 10px; margin: 20px 0; text-align: center;">
-              <h4 style="color: #78350f; margin: 0 0 10px 0; font-size: 18px;">Your Unique Check-in Code:</h4>
-              <div style="background: white; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 28px; font-weight: bold; color: #b45309; letter-spacing: 3px; border: 2px dashed #d97706; display: inline-block;">
-                ${uniqueCode}
-              </div>
-              <p style="color: #78350f; font-size: 14px; margin: 10px 0 0 0;">
-                Please keep this code safe! You'll need it to check in at the event.
+              <h4 style="color: #78350f; margin: 0 0 10px 0; font-size: 18px;">How to Check In:</h4>
+              <p style="color: #78350f; font-size: 16px; margin: 10px 0;">
+                <strong>Simply use your email address!</strong><br><br>
+                1. Go to the check-in desk at the event<br>
+                2. Provide your email address: <strong>${email}</strong><br>
+                3. Get your name marked as checked in!<br><br>
+                <em>No code needed - just your email address!</em>
               </p>
             </div>
             
             <p style="color: #374151; font-size: 16px; line-height: 1.6; text-align: center;">
-              We can't wait to celebrate with you! If you have any questions, please don't hesitate to reach out.
+              We're excited to celebrate with you! See you at the party! 🥂
             </p>
           </div>
           
@@ -91,14 +114,16 @@ export async function POST(request: NextRequest) {
       `,
     }
 
-    await transporter.sendMail(mailOptions)
+    console.log('Sending email to:', email)
+    const info = await transporter.sendMail(mailOptions)
+    console.log('Email sent successfully:', info.messageId)
 
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('Error sending email:', error)
     return NextResponse.json({
       success: false,
-      error: 'Failed to send email'
+      error: `Failed to send email: ${error instanceof Error ? error.message : 'Unknown error'}`
     }, { status: 500 })
   }
 }

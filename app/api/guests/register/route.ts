@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { databases, ID, DATABASE_ID, GUESTS_COLLECTION_ID, Permission, Role, Query } from '@/lib/appwrite'
 import { generateUniqueCode } from '@/utils/uniqueCode'
+import { sendEmail } from '@/utils/email'
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.json()
-    
+
     // Validate required fields
     if (!formData.email || !formData.firstName || !formData.lastName || !formData.phone) {
       return NextResponse.json(
@@ -21,7 +22,7 @@ export async function POST(request: NextRequest) {
       databaseId: DATABASE_ID,
       collectionId: GUESTS_COLLECTION_ID
     })
-    
+
     if (!process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || !process.env.APPWRITE_API_KEY) {
       console.error('Missing Appwrite environment variables')
       return NextResponse.json(
@@ -39,7 +40,7 @@ export async function POST(request: NextRequest) {
         [Query.equal("email", formData.email.toLowerCase())]
       );
       console.log('Email query successful')
-      
+
       if (emailQuery.documents.length > 0) {
         return NextResponse.json({
           success: false,
@@ -51,33 +52,18 @@ export async function POST(request: NextRequest) {
       // Don't throw error, just log and continue
     }
 
-    // Generate unique code
-    let uniqueCode = generateUniqueCode()
-    console.log('Generated unique code:', uniqueCode)
-    
-    // Check if code already exists (very unlikely but good practice)
-    try {
-      const codeQuery = await databases.listDocuments(
-        DATABASE_ID,
-        GUESTS_COLLECTION_ID,
-        [Query.equal("uniqueCode", uniqueCode)]
-      )
-      
-      if (codeQuery.documents.length > 0) {
-        // Regenerate code if collision occurs
-        uniqueCode = generateUniqueCode()
-      }
-    } catch (error) {
-      console.warn('Could not check for existing code:', error)
-    }
 
-    // Create guest document
+    // Generate unique code for the guest
+    const uniqueCode = generateUniqueCode()
+
+    // Create guest document - only include fields that exist in the collection
     const guestData = {
       email: formData.email.toLowerCase(),
       firstName: formData.firstName,
       lastName: formData.lastName,
       phone: formData.phone,
-      uniqueCode,
+      uniqueCode: uniqueCode,
+      extraGuests: formData.extraGuests,
       isCheckedIn: false
     }
 
@@ -90,39 +76,21 @@ export async function POST(request: NextRequest) {
     )
     console.log('Guest document created successfully:', document.$id)
 
-    // Send verification email
-    try {
-      const emailResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/send-email`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          uniqueCode,
-          guestName: `${formData.firstName} ${formData.lastName}`
-        }),
-      })
-
-      const emailResult = await emailResponse.json()
-      if (!emailResult.success) {
-        console.error('Failed to send email:', emailResult.error)
-        // Still return success but log the email error
-      }
-    } catch (emailError) {
-      console.error('Error sending email:', emailError)
-      // Still return success but log the email error
-    }
-
-    return NextResponse.json({
+    // Return success immediately after database save
+    const response = NextResponse.json({
       success: true,
-      uniqueCode,
       guestId: document.$id
     })
 
+    // Send verification email asynchronously (non-blocking)
+    const emailInfo = sendEmail(formData.email, `${formData.firstName} ${formData.lastName}`, formData.extraGuests || 0)
+    console.log('Email sent response:', emailInfo)
+
+    return response
+
   } catch (error) {
     console.error('Error registering guest:', error)
-    
+
     // Check if it's a database error
     if (error instanceof Error) {
       if (error.message.includes('Database not found')) {
@@ -144,7 +112,7 @@ export async function POST(request: NextRequest) {
         )
       }
     }
-    
+
     return NextResponse.json(
       { success: false, error: 'Failed to register guest. Please try again.' },
       { status: 500 }
