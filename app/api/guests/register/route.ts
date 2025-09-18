@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
     })
 
     // Send verification email asynchronously (non-blocking)
-    const emailInfo = sendEmail(formData.email, `${formData.firstName} ${formData.lastName}`, formData.extraGuests || 0)
+    const emailInfo = await sendEmail(formData.email, `${formData.firstName} ${formData.lastName}`, formData.extraGuests || 0)
     console.log('Email sent response:', emailInfo)
 
     return response

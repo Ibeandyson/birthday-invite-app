@@ -1,14 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import nodemailer from 'nodemailer'
+import { Resend } from 'resend';
 
 export const sendEmail = (email: string, guestName: string, extraGuests: any) => {
 
-  if (!email || !guestName) {
-    return NextResponse.json({
-      success: false,
-      error: 'Missing required fields'
-    }, { status: 400 })
-  }
 
   // Check if SMTP environment variables are set
   if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
@@ -30,15 +25,6 @@ export const sendEmail = (email: string, guestName: string, extraGuests: any) =>
     user: process.env.SMTP_USER
   })
 
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: parseInt(process.env.SMTP_PORT || '587'),
-    secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  })
 
   const mailOptions = {
     from: process.env.SMTP_USER,
@@ -119,8 +105,10 @@ export const sendEmail = (email: string, guestName: string, extraGuests: any) =>
   }
 
   console.log('Sending email to:', email)
-  const info = transporter.sendMail(mailOptions)
-  
+
+  const resend = new Resend(process.env.RESENDER_API_KEY || '');
+
+  const info = resend.emails.send(mailOptions)
 
   return info
 }
@@ -153,15 +141,15 @@ export const sendCheckInEmail = (email: string, guestName: string, extraGuests: 
     user: process.env.SMTP_USER
   })
 
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: parseInt(process.env.SMTP_PORT || '587'),
-    secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  })
+  // const transporter = nodemailer.createTransport({
+  //   host: process.env.SMTP_HOST,
+  //   port: parseInt(process.env.SMTP_PORT || '587'),
+  //   secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
+  //   auth: {
+  //     user: process.env.SMTP_USER,
+  //     pass: process.env.SMTP_PASS,
+  //   },
+  // })
 
   const mailOptions = {
     from: process.env.SMTP_USER,
@@ -228,7 +216,10 @@ export const sendCheckInEmail = (email: string, guestName: string, extraGuests: 
   }
 
   console.log('Sending check-in email to:', email)
-  const info = transporter.sendMail(mailOptions)
-  
+
+  const resend = new Resend(process.env.RESENDER_API_KEY || '');
+
+  const info = resend.emails.send(mailOptions)
+
   return info
 }

@@ -9,6 +9,7 @@ export default function AdminPage() {
   const [guests, setGuests] = useState<Guest[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [downloading, setDownloading] = useState(false)
 
   useEffect(() => {
     const fetchGuests = async () => {
@@ -33,6 +34,125 @@ export default function AdminPage() {
   const totalCount = guests.length
   const totalExtraGuests = guests.reduce((sum, guest) => sum + (guest.extraGuests || 0), 0)
   const totalAttendees =  Number(totalCount) + Number(totalExtraGuests)
+
+  const downloadCSV = () => {
+    setDownloading(true)
+    let downloadSuccess = false
+    
+    try {
+      console.log('Starting CSV download, guests count:', guests.length)
+      
+      if (guests.length === 0) {
+        alert('No guests data available to download.')
+        setDownloading(false)
+        return
+      }
+
+      const headers = [
+        'Name',
+        'Email', 
+        'Phone',
+        'Extra Guests',
+        'Status',
+        'Registered Date',
+        'Checked In Date',
+        'Unique Code'
+      ]
+
+      const csvData = guests.map((guest, index) => {
+        console.log(`Processing guest ${index + 1}:`, guest)
+        return [
+          `"${(guest.firstName || '').replace(/"/g, '""')} ${(guest.lastName || '').replace(/"/g, '""')}"`,
+          `"${(guest.email || '').replace(/"/g, '""')}"`,
+          `"${(guest.phone || '').replace(/"/g, '""')}"`,
+          guest.extraGuests || 0,
+          guest.isCheckedIn ? 'Checked In' : 'Not Checked In',
+          `"${guest.registeredAt ? new Date(guest.registeredAt).toLocaleDateString() : 'N/A'}"`,
+          guest.checkedInAt ? `"${new Date(guest.checkedInAt).toLocaleDateString()}"` : 'Not Checked In',
+          `"${(guest.uniqueCode || 'N/A').replace(/"/g, '""')}"`
+        ]
+      })
+
+      const csvContent = [
+        headers.join(','),
+        ...csvData.map(row => row.join(','))
+      ].join('\n')
+
+      console.log('CSV Content preview:', csvContent.substring(0, 500) + '...')
+
+      // Create and download the file
+      const blob = new Blob([csvContent], { 
+        type: 'text/csv;charset=utf-8;' 
+      })
+      
+      console.log('Blob created, size:', blob.size)
+      
+      const url = URL.createObjectURL(blob)
+      console.log('Object URL created:', url)
+      
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `birthday-guests-${new Date().toISOString().split('T')[0]}.csv`
+      link.style.display = 'none'
+      
+      // Add event listener to detect successful download
+      link.addEventListener('click', () => {
+        downloadSuccess = true
+        console.log('Download initiated successfully')
+      })
+      
+      document.body.appendChild(link)
+      console.log('Link added to DOM, clicking...')
+      
+      link.click()
+      console.log('Link clicked')
+      
+      // Only run fallback if primary download didn't work
+      setTimeout(() => {
+        if (!downloadSuccess) {
+          console.log('Primary download may have failed, trying fallback...')
+          try {
+            const newWindow = window.open(url, '_blank')
+            if (!newWindow) {
+              console.log('Popup blocked, trying alternative method...')
+              // Alternative method: create a data URL
+              const dataUrl = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvContent)
+              const fallbackLink = document.createElement('a')
+              fallbackLink.href = dataUrl
+              fallbackLink.download = `birthday-guests-${new Date().toISOString().split('T')[0]}.csv`
+              fallbackLink.click()
+            }
+          } catch (fallbackError) {
+            console.error('Fallback method also failed:', fallbackError)
+          }
+        } else {
+          console.log('Primary download succeeded, skipping fallback')
+        }
+      }, 1000)
+      
+      // Cleanup
+      setTimeout(() => {
+        if (document.body.contains(link)) {
+          document.body.removeChild(link)
+        }
+        URL.revokeObjectURL(url)
+        setDownloading(false)
+        console.log('Cleanup completed')
+      }, 3000)
+      
+    } catch (error) {
+      console.error('Error downloading CSV:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      const errorStack = error instanceof Error ? error.stack : 'No stack trace'
+      console.error('Error details:', {
+        message: errorMessage,
+        stack: errorStack,
+        guestsLength: guests.length
+      })
+      alert(`Error downloading CSV file: ${errorMessage}. Please check the console for details.`)
+      setDownloading(false)
+    }
+  }
 
   if (loading) {
     return (
@@ -117,6 +237,32 @@ export default function AdminPage() {
               <div className="text-3xl font-bold text-green-600 mb-2">{checkedInCount}</div>
               <div className="text-gray-600">Checked In</div>
             </div>
+          </div>
+
+          {/* Download CSV Button */}
+          <div className="mb-8 text-center fade-in" style={{ animationDelay: '0.4s' }}>
+            <button
+              onClick={downloadCSV}
+              disabled={downloading}
+              className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
+            >
+              {downloading ? (
+                <>
+                  <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Downloading...
+                </>
+              ) : (
+                <>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Download CSV
+                </>
+              )}
+            </button>
           </div>
 
           {/* Guests Table */}
