@@ -77,8 +77,9 @@ export const sendEmail = (email: string, guestName: string, extraGuests: any) =>
               <p style="color: #78350f; font-size: 16px; margin: 10px 0;">
                 <strong>Simply use your email address!</strong><br><br>
                 1. Go to the check-in desk at the event<br>
-                2. Provide your email address: <strong>${email}</strong><br>
-                3. Get your name marked as checked in!<br><br>
+                2. ⁠Scan the QR code at the check-in section with your phone<br>
+                3. Fill in your email address: <strong>${email}</strong><br>
+                4. Get your name marked as checked in!<br><br>
                 <em>No code needed - just your email address!</em>
               </p>
             </div>
@@ -88,12 +89,12 @@ export const sendEmail = (email: string, guestName: string, extraGuests: any) =>
             </p>
           </div>
           
-          <!-- Special Invitation Banner -->
+          <!-- Grace Banner -->
           <div style="background: #fef3c7; padding: 15px; border-radius: 10px; text-align: center; position: relative; overflow: hidden;">
             <div style="position: absolute; top: 0; right: 0; width: 80px; height: 100%; background: linear-gradient(to left, rgba(245, 158, 11, 0.3), transparent);"></div>
             <div style="position: relative; z-index: 10;">
               <div style="color: #92400e; font-size: 12px; font-weight: 500; margin-bottom: 2px;">four decades of</div>
-              <div style="color: #78350f; font-size: 18px; font-weight: bold;">SPECIAL INVITATION</div>
+              <div style="color: #78350f; font-size: 18px; font-weight: bold;">Grace</div>
             </div>
           </div>
           
@@ -199,12 +200,12 @@ export const sendCheckInEmail = (email: string, guestName: string, extraGuests: 
             </p>
           </div>
           
-         <!-- Special Invitation Banner -->
+         <!-- Grace Banner -->
           <div style="background: #fef3c7; padding: 15px; border-radius: 10px; text-align: center; position: relative; overflow: hidden;">
             <div style="position: absolute; top: 0; right: 0; width: 80px; height: 100%; background: linear-gradient(to left, rgba(245, 158, 11, 0.3), transparent);"></div>
             <div style="position: relative; z-index: 10;">
               <div style="color: #92400e; font-size: 12px; font-weight: 500; margin-bottom: 2px;">four decades of</div>
-              <div style="color: #78350f; font-size: 18px; font-weight: bold;">SPECIAL INVITATION</div>
+              <div style="color: #78350f; font-size: 18px; font-weight: bold;">Grace</div>
             </div>
           </div>
           

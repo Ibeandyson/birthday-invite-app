@@ -387,7 +387,7 @@ export default function Home() {
                 </a>
               </div>
 
-              {/* Special Invitation Banner */}
+              {/* Grace Banner */}
               <div className="relative">
                 <div
                   className="rounded-lg p-4 relative overflow-hidden"
@@ -407,7 +407,7 @@ export default function Home() {
                       className="text-xl font-bold"
                       style={{ color: "#1a1a1a" }}
                     >
-                      SPECIAL INVITATION
+                      Grace
                     </div>
                   </div>
                 </div>
