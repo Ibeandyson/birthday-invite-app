@@ -40,7 +40,7 @@ export default function Header() {
             </h1>
           </div>
           <p className="text-lg text-gold-600 font-medium slide-up">
-            Join us for a special celebration!
+             ⁠Chika 4 decades of grace registration celebration party for a special celebration!
           </p>
           <div className="mt-4 flex justify-center space-x-2">
             <div className="w-2 h-2 bg-gold-400 rounded-full animate-pulse"></div>

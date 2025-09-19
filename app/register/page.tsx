@@ -26,7 +26,7 @@ export default function RegisterPage() {
               Guest Registration
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto fade-in">
-              Join us for the birthday celebration! Fill out the form below to register and use your email for check-in at the event.
+               ⁠Chika 4 decades of grace registration celebration party for the birthday celebration! Fill out the form below to register and use your email for check-in at the event.
             </p>
           </div>
 

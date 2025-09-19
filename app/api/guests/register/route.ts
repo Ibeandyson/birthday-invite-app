@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { databases, ID, DATABASE_ID, GUESTS_COLLECTION_ID, Permission, Role, Query } from '@/lib/appwrite'
-import { generateUniqueCode } from '@/utils/uniqueCode'
 import { sendEmail } from '@/utils/email'
 
 export async function POST(request: NextRequest) {
@@ -52,17 +51,12 @@ export async function POST(request: NextRequest) {
       // Don't throw error, just log and continue
     }
 
-
-    // Generate unique code for the guest
-    const uniqueCode = generateUniqueCode()
-
     // Create guest document - only include fields that exist in the collection
     const guestData = {
       email: formData.email.toLowerCase(),
       firstName: formData.firstName,
       lastName: formData.lastName,
       phone: formData.phone,
-      uniqueCode: uniqueCode,
       extraGuests: formData.extraGuests,
       isCheckedIn: false
     }

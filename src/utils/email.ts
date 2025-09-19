@@ -29,14 +29,14 @@ export const sendEmail = (email: string, guestName: string, extraGuests: any) =>
   const mailOptions = {
     from: process.env.SMTP_USER,
     to: email,
-    subject: 'Welcome to the Birthday Celebration!',
+    subject: 'Invite registered!',
     html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, #fefdf8 0%, #fdf9e7 100%); padding: 40px; border-radius: 20px; position: relative; overflow: hidden;">
           <!-- Gold Glitter Background -->
           <div style="position: absolute; top: 0; left: 0; width: 100%; height: 60px; background: linear-gradient(to bottom, rgba(245, 158, 11, 0.2), transparent);"></div>
           
           <div style="text-align: center; margin-bottom: 30px; position: relative; z-index: 10;">
-            <h1 style="color: #92400e; font-size: 32px; margin: 0; font-family: 'Dancing Script', cursive; font-weight: 600;">Level 40 Unlocked</h1>
+            <h1 style="color: #92400e; font-size: 32px; margin: 0; font-family: 'Dancing Script', cursive; font-weight: 600;">4 Decades Of Grace</h1>
             <div style="width: 60px; height: 2px; background: #d97706; margin: 10px auto;"></div>
             <h2 style="color: #b45309; font-size: 48px; margin: 20px 0; font-family: 'Dancing Script', cursive; font-weight: 700;">Let's Party</h2>
           </div>
@@ -45,7 +45,7 @@ export const sendEmail = (email: string, guestName: string, extraGuests: any) =>
             <h3 style="color: #78350f; font-size: 24px; margin-bottom: 20px; text-align: center;">Hello ${guestName}! 👋</h3>
             
             <p style="color: #374151; font-size: 16px; line-height: 1.6; margin-bottom: 20px; text-align: center;">
-              Welcome to the birthday celebration! Use your email address to check in at the event.
+            Thanks for confirming your attendance. Chika is thrilled you’re coming! You’re officially in the birthday squad — fun awaits
             </p>
 
             ${Number(extraGuests) > 0 ? `
@@ -85,7 +85,7 @@ export const sendEmail = (email: string, guestName: string, extraGuests: any) =>
             </div>
             
             <p style="color: #374151; font-size: 16px; line-height: 1.6; text-align: center;">
-              We're excited to celebrate with you! See you at the party! 🥂
+              Mark your calendars — the fun officially starts with you. See you soon! 🥂
             </p>
           </div>
           
@@ -99,7 +99,7 @@ export const sendEmail = (email: string, guestName: string, extraGuests: any) =>
           </div>
           
           <div style="text-align: center; color: #6b7280; font-size: 14px; margin-top: 20px;">
-            <p>Best regards,<br>The Birthday Celebration Team</p>
+            <p>Best regards,<br>Chika</p>
           </div>
         </div>
       `,
@@ -155,14 +155,14 @@ export const sendCheckInEmail = (email: string, guestName: string, extraGuests: 
   const mailOptions = {
     from: process.env.SMTP_USER,
     to: email,
-    subject: 'Check-in Confirmation - Birthday Celebration!',
+    subject: 'Check-in Confirmation!',
     html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, #fefdf8 0%, #fdf9e7 100%); padding: 40px; border-radius: 20px; position: relative; overflow: hidden;">
           <!-- Gold Glitter Background -->
           <div style="position: absolute; top: 0; left: 0; width: 100%; height: 60px; background: linear-gradient(to bottom, rgba(245, 158, 11, 0.2), transparent);"></div>
           
           <div style="text-align: center; margin-bottom: 30px; position: relative; z-index: 10;">
-            <h1 style="color: #92400e; font-size: 32px; margin: 0; font-family: 'Dancing Script', cursive; font-weight: 600;">Level 40 Unlocked</h1>
+            <h1 style="color: #92400e; font-size: 32px; margin: 0; font-family: 'Dancing Script', cursive; font-weight: 600;">4 Decades Of Grace</h1>
             <div style="width: 60px; height: 2px; background: #d97706; margin: 10px auto;"></div>
             <h2 style="color: #b45309; font-size: 48px; margin: 20px 0; font-family: 'Dancing Script', cursive; font-weight: 700;">Welcome!</h2>
           </div>

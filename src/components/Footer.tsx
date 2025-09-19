@@ -10,7 +10,7 @@ export default function Footer() {
             <div className="text-center md:text-left">
               <h3 className="text-2xl font-elegant mb-4">🎉 Birthday Celebration</h3>
               <p className="text-gold-200 mb-4">
-                Join us for an unforgettable birthday celebration filled with joy, laughter, and wonderful memories.
+                 ⁠Chika 4 decades of grace registration celebration party for an unforgettable birthday celebration filled with joy, laughter, and wonderful memories.
               </p>
             </div>
 
