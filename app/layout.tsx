@@ -4,7 +4,7 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Birthday Party Invitation',
-  description: ' ⁠Chika 4 decades of grace registration celebration party for a special birthday celebration!',
+  description: 'Chika 4 decades of Grace celebration party registration link.',
 }
 
 export default function RootLayout({

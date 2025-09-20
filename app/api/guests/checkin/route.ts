@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      guestName: `${guestData.firstName} ${guestData.lastName}`,
+      guestName: `${guestData.firstName}`,
       extraGuests: (guestData as any).extraGuests || 0,
       isAlreadyCheckedIn: false
     })
