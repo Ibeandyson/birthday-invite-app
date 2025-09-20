@@ -89,14 +89,14 @@ export const sendEmail = (email: string, guestName: string, extraGuests: any) =>
             </p>
           </div>
           
-          <!-- Grace Banner -->
-          <div style="background: #fef3c7; padding: 15px; border-radius: 10px; text-align: center; position: relative; overflow: hidden;">
-            <div style="position: absolute; top: 0; right: 0; width: 80px; height: 100%; background: linear-gradient(to left, rgba(245, 158, 11, 0.3), transparent);"></div>
-            <div style="position: relative; z-index: 10;">
-              <div style="color: #92400e; font-size: 12px; font-weight: 500; margin-bottom: 2px; font-family: 'Dancing Script'">four decades of</div>
-              <div style="color: #78350f; font-size: 18px; font-weight: bold; font-family: 'Dancing Script'">Grace</div>
-            </div>
-          </div>
+          // <!-- Grace Banner -->
+          // <div style="background: #fef3c7; padding: 15px; border-radius: 10px; text-align: center; position: relative; overflow: hidden;">
+          //   <div style="position: absolute; top: 0; right: 0; width: 80px; height: 100%; background: linear-gradient(to left, rgba(245, 158, 11, 0.3), transparent);"></div>
+          //   <div style="position: relative; z-index: 10;">
+          //     <div style="color: #92400e; font-size: 12px; font-weight: 500; margin-bottom: 2px; font-family: 'Dancing Script'">four decades of</div>
+          //     <div style="color: #78350f; font-size: 18px; font-weight: bold; font-family: 'Dancing Script'">Grace</div>
+          //   </div>
+          // </div>
           
           <div style="text-align: center; color: #6b7280; font-size: 14px; margin-top: 20px;">
             <p>Best regards,<br>Chika</p>
@@ -200,14 +200,14 @@ export const sendCheckInEmail = (email: string, guestName: string, extraGuests: 
             </p>
           </div>
           
-         <!-- Grace Banner -->
-          <div style="background: #fef3c7; padding: 15px; border-radius: 10px; text-align: center; position: relative; overflow: hidden;">
-            <div style="position: absolute; top: 0; right: 0; width: 80px; height: 100%; background: linear-gradient(to left, rgba(245, 158, 11, 0.3), transparent);"></div>
-            <div style="position: relative; z-index: 10;">
-              <div style="color: #92400e; font-size: 12px; font-weight: 500; margin-bottom: 2px;">four decades of</div>
-              <div style="color: #78350f; font-size: 18px; font-weight: bold;">Grace</div>
-            </div>
-          </div>
+        //  <!-- Grace Banner -->
+        //   <div style="background: #fef3c7; padding: 15px; border-radius: 10px; text-align: center; position: relative; overflow: hidden;">
+        //     <div style="position: absolute; top: 0; right: 0; width: 80px; height: 100%; background: linear-gradient(to left, rgba(245, 158, 11, 0.3), transparent);"></div>
+        //     <div style="position: relative; z-index: 10;">
+        //       <div style="color: #92400e; font-size: 12px; font-weight: 500; margin-bottom: 2px;">four decades of</div>
+        //       <div style="color: #78350f; font-size: 18px; font-weight: bold;">Grace</div>
+        //     </div>
+        //   </div>
           
           <div style="text-align: center; color: #6b7280; font-size: 14px; margin-top: 20px;">
             <p>Best regards,<br>The Birthday Celebration Team</p>

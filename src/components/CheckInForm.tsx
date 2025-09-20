@@ -58,10 +58,10 @@ export default function CheckInForm() {
             {guestInfo.isAlreadyCheckedIn ? 'Welcome Back!' : 'Check-in Successful!'}
           </h2>
           <p className="text-lg text-gray-600 mb-6 fade-in">
-            Hello <span className="font-semibold text-gold-700">{guestInfo.name}</span>! 
+          Welcome <span className="font-semibold text-gold-700"> {guestInfo.name}</span>! 
             {guestInfo.isAlreadyCheckedIn 
               ? ' You\'re already checked in. Enjoy the Enjoy the party 🥂!'
-              : 'Welcome “first name”! Glad you made it. Enjoy the party 🥂.'
+              : ' Glad you made it. Enjoy the party 🥂.'
             }
           </p>
           {guestInfo.extraGuests > 0 && (
