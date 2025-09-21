@@ -88,16 +88,7 @@ export const sendEmail = (email: string, guestName: string, extraGuests: any) =>
               Mark your calendars — the fun officially starts with you. See you soon! 🥂
             </p>
           </div>
-          
-          // <!-- Grace Banner -->
-          // <div style="background: #fef3c7; padding: 15px; border-radius: 10px; text-align: center; position: relative; overflow: hidden;">
-          //   <div style="position: absolute; top: 0; right: 0; width: 80px; height: 100%; background: linear-gradient(to left, rgba(245, 158, 11, 0.3), transparent);"></div>
-          //   <div style="position: relative; z-index: 10;">
-          //     <div style="color: #92400e; font-size: 12px; font-weight: 500; margin-bottom: 2px; font-family: 'Dancing Script'">four decades of</div>
-          //     <div style="color: #78350f; font-size: 18px; font-weight: bold; font-family: 'Dancing Script'">Grace</div>
-          //   </div>
-          // </div>
-          
+            
           <div style="text-align: center; color: #6b7280; font-size: 14px; margin-top: 20px;">
             <p>Best regards,<br>Chika</p>
           </div>
@@ -141,16 +132,6 @@ export const sendCheckInEmail = (email: string, guestName: string, extraGuests: 
     secure: process.env.SMTP_SECURE === 'true',
     user: process.env.SMTP_USER
   })
-
-  // const transporter = nodemailer.createTransport({
-  //   host: process.env.SMTP_HOST,
-  //   port: parseInt(process.env.SMTP_PORT || '587'),
-  //   secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
-  //   auth: {
-  //     user: process.env.SMTP_USER,
-  //     pass: process.env.SMTP_PASS,
-  //   },
-  // })
 
   const mailOptions = {
     from: process.env.SMTP_USER,
@@ -199,16 +180,7 @@ export const sendCheckInEmail = (email: string, guestName: string, extraGuests: 
               Enjoy the celebration! Have a wonderful time! 🥂🎂
             </p>
           </div>
-          
-        //  <!-- Grace Banner -->
-        //   <div style="background: #fef3c7; padding: 15px; border-radius: 10px; text-align: center; position: relative; overflow: hidden;">
-        //     <div style="position: absolute; top: 0; right: 0; width: 80px; height: 100%; background: linear-gradient(to left, rgba(245, 158, 11, 0.3), transparent);"></div>
-        //     <div style="position: relative; z-index: 10;">
-        //       <div style="color: #92400e; font-size: 12px; font-weight: 500; margin-bottom: 2px;">four decades of</div>
-        //       <div style="color: #78350f; font-size: 18px; font-weight: bold;">Grace</div>
-        //     </div>
-        //   </div>
-          
+                  
           <div style="text-align: center; color: #6b7280; font-size: 14px; margin-top: 20px;">
             <p>Best regards,<br>The Birthday Celebration Team</p>
           </div>

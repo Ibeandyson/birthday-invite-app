@@ -395,7 +395,7 @@ export default function Home() {
                   href="/register"
                   className="btn-primary text-lg py-4 px-12 transform hover:scale-105 transition-all duration-300 inline-flex items-center gap-2"
                 >
-                  Registration Now
+                  Register Now
                   <svg
                     className="w-6 h-6 md:w-5 md:h-5"
                     fill="none"
@@ -411,41 +411,6 @@ export default function Home() {
                   </svg>
                 </Link>
               </div>
-
-              {/* Grace Banner */}
-              {/* <div className="relative">
-                <div className="rounded-lg p-4 relative overflow-hidden bg-[#fef3c7]">
-                  <div
-                    className="absolute top-0 right-0 w-32 h-full "
-                    style={{
-                      background:
-                        "linear-gradient(to left, rgba(245, 158, 11, 0.3), transparent)",
-                    }}
-                  ></div>
-                  <div className="relative z-10">
-                    <div
-                      className="font-bold mb-1"
-                      style={{
-                        color: "#b8860b",
-                        fontFamily: "Dancing Script, cursive",
-                        fontWeight: "bold",
-                        fontSize: "20px",
-                      }}
-                    >
-                      four decades of
-                    </div>
-                    <div
-                      className="text-xl font-bold"
-                      style={{
-                        color: "#1a1a1a",
-                        fontFamily: "Dancing Script, cursive",
-                      }}
-                    >
-                      Grace
-                    </div>
-                  </div>
-                </div>
-              </div> */}
             </div>
           </div>
         </div>
