@@ -32,7 +32,7 @@ export default function AdminPage() {
 
   const checkedInCount = guests.filter(guest => guest.isCheckedIn).length
   const totalCount = guests.length
-  const totalExtraGuests = guests.reduce((sum, guest) => sum + (guest.extraGuests || 0), 0)
+  const totalExtraGuests = guests.reduce((sum, guest) => sum + (Number(guest.extraGuests) || 0), 0)
   const totalAttendees =  Number(totalCount) + Number(totalExtraGuests)
 
   const downloadCSV = () => {
