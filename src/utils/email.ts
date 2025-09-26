@@ -196,3 +196,99 @@ export const sendCheckInEmail = (email: string, guestName: string, extraGuests: 
 
   return info
 }
+
+export const sendAppreciationEmail = (email: string, guestName: string) => {
+  if (!email || !guestName) {
+    return {
+      success: false,
+      error: 'Missing required fields'
+    }
+  }
+
+  // Check if SMTP environment variables are set
+  if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    console.error('Missing SMTP environment variables:', {
+      hasHost: !!process.env.SMTP_HOST,
+      hasUser: !!process.env.SMTP_USER,
+      hasPass: !!process.env.SMTP_PASS
+    })
+    return {
+      success: false,
+      error: 'SMTP configuration missing'
+    }
+  }
+
+  console.log('Creating SMTP transporter for appreciation email with:', {
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT || '587',
+    secure: process.env.SMTP_SECURE === 'true',
+    user: process.env.SMTP_USER
+  })
+
+  const mailOptions = {
+    from: process.env.SMTP_USER,
+    to: email,
+    subject: 'Thank You for Celebrating with Us! 🎉',
+    html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, #fefdf8 0%, #fdf9e7 100%); padding: 40px; border-radius: 20px; position: relative; overflow: hidden;">
+          <!-- Gold Glitter Background -->
+          <div style="position: absolute; top: 0; left: 0; width: 100%; height: 60px; background: linear-gradient(to bottom, rgba(245, 158, 11, 0.2), transparent);"></div>
+          
+          <div style="text-align: center; margin-bottom: 30px; position: relative; z-index: 10;">
+            <h1 style="color: #92400e; font-size: 32px; margin: 0; font-family: 'Dancing Script', cursive; font-weight: 600;">4 Decades Of Grace</h1>
+            <div style="width: 60px; height: 2px; background: #d97706; margin: 10px auto;"></div>
+            <h2 style="color: #b45309; font-size: 48px; margin: 20px 0; font-family: 'Dancing Script', cursive; font-weight: 700;">Thank You!</h2>
+          </div>
+          
+          <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); margin-bottom: 20px; position: relative; z-index: 10;">
+            <h3 style="color: #78350f; font-size: 24px; margin-bottom: 20px; text-align: center;">Dear ${guestName}! 💝</h3>
+            
+            <div style="background: #fef3c7; padding: 25px; border-radius: 15px; margin: 20px 0; text-align: center; border: 2px solid #f59e0b;">
+              <h4 style="color: #78350f; margin: 0 0 15px 0; font-size: 22px;">🌟 Heartfelt Appreciation 🌟</h4>
+              <p style="color: #374151; font-size: 18px; line-height: 1.6; margin: 0; font-weight: 500;">
+                Your presence at the birthday celebration made it truly special and unforgettable!
+              </p>
+            </div>
+            
+            <p style="color: #374151; font-size: 16px; line-height: 1.6; margin-bottom: 20px; text-align: center;">
+              We are incredibly grateful that you took the time to celebrate this milestone with us. 
+              Your joy, laughter, and positive energy added so much warmth to the occasion.
+            </p>
+
+            <div style="background: #e0f2fe; padding: 20px; border-radius: 10px; margin: 20px 0; text-align: center;">
+              <h4 style="color: #0369a1; margin: 0 0 15px 0; font-size: 18px;">Memories Made Together</h4>
+              <p style="color: #0369a1; font-size: 16px; margin: 0;">
+                Every moment shared, every smile exchanged, and every memory created together 
+                will be treasured forever. Thank you for being part of this beautiful celebration!
+              </p>
+            </div>
+            
+            <div style="background: #f0d96b; padding: 20px; border-radius: 10px; margin: 20px 0; text-align: center;">
+              <h4 style="color: #78350f; margin: 0 0 10px 0; font-size: 18px;">With Gratitude</h4>
+              <p style="color: #78350f; font-size: 16px; margin: 10px 0;">
+                Your friendship and support mean the world to us. 
+                Here's to many more celebrations and wonderful memories together! 🥂✨
+              </p>
+            </div>
+            
+            <p style="color: #374151; font-size: 16px; line-height: 1.6; text-align: center; margin-top: 25px;">
+              With heartfelt thanks and warmest regards,<br>
+              <strong style="color: #d4af37;">Chika & The Birthday Team</strong>
+            </p>
+          </div>
+                  
+          <div style="text-align: center; color: #6b7280; font-size: 14px; margin-top: 20px;">
+            <p>💝 Made with love and appreciation 💝</p>
+          </div>
+        </div>
+      `,
+  }
+
+  console.log('Sending appreciation email to:', email)
+
+  const resend = new Resend(process.env.RESENDER_API_KEY || '');
+
+  const info = resend.emails.send(mailOptions)
+
+  return info
+}

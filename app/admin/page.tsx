@@ -10,17 +10,26 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [downloading, setDownloading] = useState(false)
+  const [sendingEmails, setSendingEmails] = useState<Set<string>>(new Set())
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [selectedGuest, setSelectedGuest] = useState<Guest | null>(null)
 
   useEffect(() => {
     const fetchGuests = async () => {
       try {
+        console.log('Fetching guests...')
         const result = await getAllGuests()
+        console.log('Guests fetch result:', result)
+        
         if (result.success) {
+          console.log(`Successfully fetched ${result.guests?.length || 0} guests`)
           setGuests(result.guests || [])
         } else {
+          console.error('Failed to fetch guests:', result.error)
           setError(result.error || 'Failed to fetch guests')
         }
       } catch (err) {
+        console.error('Error fetching guests:', err)
         setError('An error occurred while fetching guests')
       } finally {
         setLoading(false)
@@ -34,6 +43,55 @@ export default function AdminPage() {
   const totalCount = guests.length
   const totalExtraGuests = guests.reduce((sum, guest) => sum + (Number(guest.extraGuests) || 0), 0)
   const totalAttendees =  Number(totalCount) + Number(totalExtraGuests)
+
+  const handleSendEmailClick = (guest: Guest) => {
+    setSelectedGuest(guest)
+    setShowConfirmModal(true)
+  }
+
+  const handleConfirmSend = async () => {
+    if (!selectedGuest) return
+
+    const guestId = selectedGuest.id
+    setSendingEmails(prev => new Set(prev).add(guestId))
+    setShowConfirmModal(false)
+    
+    try {
+      const response = await fetch('/api/guests/send-appreciation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: selectedGuest.email,
+          guestName: `${selectedGuest.firstName} ${selectedGuest.lastName}`
+        })
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        alert(`Appreciation email sent successfully to ${selectedGuest.firstName} ${selectedGuest.lastName}!`)
+      } else {
+        alert(`Failed to send email: ${result.error}`)
+      }
+    } catch (error) {
+      console.error('Error sending appreciation email:', error)
+      alert('An error occurred while sending the email')
+    } finally {
+      setSendingEmails(prev => {
+        const newSet = new Set(prev)
+        newSet.delete(guestId)
+        return newSet
+      })
+      setSelectedGuest(null)
+    }
+  }
+
+  const handleCancelSend = () => {
+    setShowConfirmModal(false)
+    setSelectedGuest(null)
+  }
 
   const downloadCSV = () => {
     setDownloading(true)
@@ -277,6 +335,7 @@ export default function AdminPage() {
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Extra Guests</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Status</th>
                     <th className="text-left py-3 px-4 font-semibold text-gray-700">Registered</th>
+                    <th className="text-center py-3 px-4 font-semibold text-gray-700">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -310,6 +369,29 @@ export default function AdminPage() {
                       <td className="py-3 px-4 text-gray-600">
                         {new Date(guest.registeredAt).toLocaleDateString()}
                       </td>
+                      <td className="py-3 px-4 text-center">
+                        <button
+                          onClick={() => handleSendEmailClick(guest)}
+                          disabled={sendingEmails.has(guest.id)}
+                          className="inline-flex items-center justify-center w-10 h-10 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                          style={{
+                            backgroundColor: sendingEmails.has(guest.id) ? '#9ca3af' : '#d4af37',
+                            color: 'white'
+                          }}
+                          title="Send appreciation email"
+                        >
+                          {sendingEmails.has(guest.id) ? (
+                            <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                          ) : (
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                          )}
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -332,6 +414,46 @@ export default function AdminPage() {
           </div>
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      {showConfirmModal && selectedGuest && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
+            <div className="text-center">
+              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100 mb-4">
+                <svg className="h-6 w-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                Send Appreciation Email
+              </h3>
+              <p className="text-sm text-gray-500 mb-6">
+                Are you sure you want to send an appreciation email to{' '}
+                <span className="font-semibold text-gray-900">
+                  {selectedGuest.firstName} {selectedGuest.lastName}
+                </span>
+                ?
+              </p>
+              <div className="flex space-x-3 justify-center">
+                <button
+                  onClick={handleCancelSend}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleConfirmSend}
+                  className="px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors duration-200"
+                  style={{ backgroundColor: '#d4af37' }}
+                >
+                  Send Email
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   )
 }
