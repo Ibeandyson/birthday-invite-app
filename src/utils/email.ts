@@ -228,7 +228,7 @@ export const sendAppreciationEmail = (email: string, guestName: string) => {
   const mailOptions = {
     from: process.env.SMTP_USER,
     to: email,
-    subject: 'Thank You for Celebrating with Us! 🎉',
+    subject: 'Thank You for Celebrating with Me! 🎉',
     html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, #fefdf8 0%, #fdf9e7 100%); padding: 40px; border-radius: 20px; position: relative; overflow: hidden;">
           <!-- Gold Glitter Background -->
@@ -251,8 +251,7 @@ export const sendAppreciationEmail = (email: string, guestName: string) => {
             </div>
             
             <p style="color: #374151; font-size: 16px; line-height: 1.6; margin-bottom: 20px; text-align: center;">
-              Chika is incredibly grateful that you took the time to celebrate this milestone with me. 
-              Your joy, laughter, and positive energy added so much warmth to the occasion.
+            I’m incredibly grateful that you took the time to celebrate this milestone with me. Your joy, laughter, and positive energy added so much warmth to the occasion
             </p>
 
             <div style="background: #e0f2fe; padding: 20px; border-radius: 10px; margin: 20px 0; text-align: center;">
