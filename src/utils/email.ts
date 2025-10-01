@@ -251,25 +251,9 @@ export const sendAppreciationEmail = (email: string, guestName: string) => {
             </div>
             
             <p style="color: #374151; font-size: 16px; line-height: 1.6; margin-bottom: 20px; text-align: center;">
-            I’m incredibly grateful that you took the time to celebrate this milestone with me. Your joy, laughter, and positive energy added so much warmth to the occasion
+            I’m incredibly grateful that you took the time to celebrate this milestone with me.
             </p>
 
-            <div style="background: #e0f2fe; padding: 20px; border-radius: 10px; margin: 20px 0; text-align: center;">
-              <h4 style="color: #0369a1; margin: 0 0 15px 0; font-size: 18px;">Memories Made Together</h4>
-              <p style="color: #0369a1; font-size: 16px; margin: 0;">
-                Every moment shared, every smile exchanged, and every memory created together 
-                will be treasured forever. Thank you for being part of this beautiful celebration!
-              </p>
-            </div>
-            
-            <div style="background: #f0d96b; padding: 20px; border-radius: 10px; margin: 20px 0; text-align: center;">
-              <h4 style="color: #78350f; margin: 0 0 10px 0; font-size: 18px;">With Gratitude</h4>
-              <p style="color: #78350f; font-size: 16px; margin: 10px 0;">
-                Your friendship and support mean the world to me. 
-                Here's to many more celebrations and wonderful memories together! 🥂✨
-              </p>
-            </div>
-            
             <p style="color: #374151; font-size: 16px; line-height: 1.6; text-align: center; margin-top: 25px;">
               With heartfelt thanks and warmest regards,<br>
               <strong style="color: #d4af37;">Chika</strong>
